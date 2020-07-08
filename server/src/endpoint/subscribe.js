@@ -22,7 +22,9 @@ const run = (raw_request, context, ruleset, metadata, send, done) => {
           send({ state: 'synced' });
         } else if ((item.old_val && !ruleset.validate(context, item.old_val)) ||
                    (item.new_val && !ruleset.validate(context, item.new_val))) {
-          throw new Error('Operation not permitted.');
+          // Ignore instead of error: filter items based on permissions.
+          // TODO: findAll should have better filtering methods to avoid this.
+          // throw new Error('Operation not permitted.');
         } else {
           send({ data: [ item ] });
         }

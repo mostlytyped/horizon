@@ -104,8 +104,10 @@ const run = (raw_request, context, ruleset, metadata, send, done) => {
       cursor = res;
       return cursor.eachAsync((item) => {
         if (!ruleset.validate(context, item)) {
-          done(new Error('Operation not permitted.'));
-          cursor.close().catch(() => { });
+          // Ignore instead of error: filter items based on permissions.
+          // TODO: findAll should have better filtering methods to avoid this.
+          // done(new Error('Operation not permitted.'));
+          // cursor.close().catch(() => { });
         } else {
           send({ data: [ item ] });
         }
